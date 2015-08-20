@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<title>Student Assignment Info</title>
+</head>
+<body>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Strogheim's Gradebook</a>
+    </div>
+    <div>
+      <ul class="nav navbar-nav">
+        <li><a href="WelcomePage.html">HomePage</a></li>
+        <li><a href="Student.html">Student Assignments</a></li>
+        <li><a href="Type.html">Assignments Of Type</a></li>
+        <li class="active"><a href="StudentType.html">Student_Assign Of Type</a></li>
+          <li><a href="AvgStudent.html">Avg_For_Student</a></li>
+            <li><a href="AHLStudentType.html">Avg_Low_High For Student_AssignType</a></li>              
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container">
+  <div class="jumbotron">
+    <h2 align="center">Welcome to Student Assignment Information</h2>   
+  </div>   
+</div>
+<p>Please enter the assignment name :</p>
+<form action="StudentAssignmentTypes" method="post">
+<label>Name: </label>
+<input  type="text" name="Name" required ><br>
+<label>Assignment Type: </label>
+<input  type="text" name="AssignmentType" required ><br>
+<label>&nbsp;</label>
+<input type="submit" value="Enter" id="submit">
+</form>
+</body>
+</html>
