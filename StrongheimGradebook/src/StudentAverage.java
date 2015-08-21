@@ -58,11 +58,20 @@ String url2="";
 	        Connection conn = DriverManager.getConnection(url,props);
 	        //creating connection to Oracle database using JDBC              
 	        Statement s=conn.createStatement();
-	        ResultSet res=s.executeQuery("select avg(grade) as Avg from sgradebook where student_name='"+Name+"'");
-	       
+	        message+="<div align=\"center\"><table style=\"border:2px solid black\">";
+            message+="<th style=\" background-color:gray;border:2px solid black\">Class</th><th style=\" background-color:gray;border:2px solid black\">Avg_Grade</th>";
+	        ResultSet res2=s.executeQuery("select C,sum(Weighted_grade) as Avg_Grade from (select  C,T,(Avg*assign_weights.weight) as Weighted_Grade from assign_weights,(select class as C,type as T, avg(grade) as Avg from sgradebook  where student_name='"+Name+"' group by class,type) where assign_weights.ASSIGN_TYPE=T) group by C");
+	        while (res2.next()){
+		    	   message+="<tr ><td style=\" background-color:white;border:2px solid black\">"+ res2.getString("C")+ 
+		    			   "</td><td style=\"background-color:white;border:2px solid black\">" +res2.getInt("avg_grade")+
+		             		  "</td></tr>" ;  
+		       }
+	        //System.out.println(message);
+	        ResultSet res=s.executeQuery("select sum( Avg*assign_weights.weight)as Sum from assign_weights,(select class,type as T, avg(grade) as Avg from sgradebook  where student_name='"+Name+"' group by class,type)where assign_weights.ASSIGN_TYPE=T");
+	      
 	        while(res.next()){
 
-                message+="Average grade for Student "+Name+" = "+res.getInt("Avg");
+                message+="Average grade  for all classes for "+Name+" = "+res.getInt("Sum");
 	        }
 	        
             

@@ -63,7 +63,7 @@ String url2="";
 	        ResultSet res=s.executeQuery("select * from sgradebook where type='"+Type+"' and student_name='"+Name+"'");
 	        System.out.println("select * from sgradebook where type='"+Type+"' and student_name='"+Name+"'");
 	        message+="<div align=\"center\"><table style=\"border:2px solid black\">";
-            message+="<th style=\" background-color:gray;border:2px solid black\">StudentID</th><th style=\" background-color:gray;border:2px solid black\">Name</th><th style=\" background-color:gray;border:2px solid black\">Assignment</th><th style=\" background-color:gray;border:2px solid black\">Type</th><th style=\" background-color:gray;border:2px solid black\">Grade</th>";
+            message+="<th style=\" background-color:gray;border:2px solid black\">StudentID</th><th style=\" background-color:gray;border:2px solid black\">Name</th><th style=\" background-color:gray;border:2px solid black\">Assignment</th><th style=\" background-color:gray;border:2px solid black\">Type</th><th style=\" background-color:gray;border:2px solid black\">Grade</th><th style=\" background-color:gray;border:2px solid black\">Class</th>";
 	        while(res.next()){
 	        	count++;
                 message+="<tr ><td style=\" background-color:white;border:2px solid black\">"+ res.getInt("student_id")+ 
@@ -71,6 +71,7 @@ String url2="";
                 		"</td><td style=\" background-color:white;border:2px solid black\">"+ res.getString("assignment")+              
              		   "</td><td style=\" background-color:white;border:2px solid black\">"+res.getString("type")+
              		   "</td><td style=\"background-color:white;border:2px solid black\">" +res.getInt("grade")+
+             		   "</td><td style=\"background-color:white;border:2px solid black\">" +res.getString("class")+
              		  "</td></tr>" ;  
 	        }
 	        

@@ -3,6 +3,7 @@
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Properties;
@@ -14,16 +15,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class AHLStudentAssignments
+ * Servlet implementation class WeightsEntry
  */
-@WebServlet("/AHLStudentAssignments")
-public class AHLStudentAssignments extends HttpServlet {
+@WebServlet("/WeightsEntry")
+public class WeightsEntry extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-     private String message; 
+    private String message;   
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AHLStudentAssignments() {
+    public WeightsEntry() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -33,7 +34,7 @@ public class AHLStudentAssignments extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doPost(request,response);
+		doPost(request, response);
 	}
 
 	/**
@@ -41,15 +42,12 @@ public class AHLStudentAssignments extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-String url2="";
-		
-		// get parameters from the request
-		String Name=request.getParameter("Name");
-		String Type=request.getParameter("AssignmentType");
-		System.out.println(Name);
-		System.out.println(Type);
-		// store data in User object and save User object in db
-		 try{
+		String url2="";
+		message="";
+		String Weight = request.getParameter("Weight");
+		String Type=request.getParameter("Type");
+		double wt=Double.parseDouble(Weight);
+		try{
 			  message="";  
 			  String url= "jdbc:oracle:thin:testuser/password@localhost"; 
 			  Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -58,22 +56,22 @@ String url2="";
 	        props.setProperty("user", "testdb");
 	        props.setProperty("password", "password");
 	        Connection conn = DriverManager.getConnection(url,props);
-	        //creating connection to Oracle database using JDBC  
-	        message+="<div align=\"center\"><table style=\"border:2px solid black\">";
-            message+="<th style=\" background-color:gray;border:2px solid black\">Class</th><th style=\" background-color:gray;border:2px solid black\">Type</th><th style=\" background-color:gray;border:2px solid black\">Min</th><th style=\" background-color:gray;border:2px solid black\">Max</th><th style=\" background-color:gray;border:2px solid black\">Avg</th>";
+	        //creating connection to Oracle database using JDBC              
 	        Statement s=conn.createStatement();
-	        ResultSet res=s.executeQuery("select class,type,avg(grade) as Avg ,min(grade) as Min ,max(grade) as Max from sgradebook where student_name='"+Name+"' and type='"+Type+"' group by class,type");
-	      
-	        while(res.next()){
-	      message+="<tr ><td style=\" background-color:white;border:2px solid black\">"+ res.getString("class")+ 
-        		"</td><td style=\" background-color:white;border:2px solid black\">"+ res.getString("type")+ 
-        		"</td><td style=\" background-color:white;border:2px solid black\">"+ res.getInt("min")+              
-     		   "</td><td style=\" background-color:white;border:2px solid black\">"+res.getInt("max")+
-     		  "</td><td style=\"background-color:white;border:2px solid black\">" +res.getInt("avg")+
-     		  "</td></tr>" ;  
+	        ResultSet res=s.executeQuery("select assign_type from assign_weights where assign_type='"+Type+"'");
+	        if(res.next()){
+	        	
+	             PreparedStatement ps=conn.prepareStatement("update assign_weights set weight="+wt+" where assign_type='"+Type+"'");            
+	             ps.executeQuery(); 
 	        }
-	        
-            
+	        else{
+
+	        	Statement st=conn.createStatement();
+	        	st.executeQuery("insert into assign_weights values('"+Type+"',"+wt+")");
+		         
+	        }
+           message+="The Information you enetered is as follows:<br>";
+           message+="Assign_Type:"+Type+"<br>New Weight:"+Weight;
 		// set User object in request object and set URL
 		request.setAttribute("message", message);
 		url2="/output.jsp";
@@ -82,6 +80,8 @@ String url2="";
 			System.out.println(e.getMessage());
 
 		}
+	
+
 	}
 
 }

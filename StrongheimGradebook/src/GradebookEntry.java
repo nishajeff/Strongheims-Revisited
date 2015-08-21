@@ -49,6 +49,7 @@ public class GradebookEntry extends HttpServlet {
 		String Assignment = request.getParameter("Assignment");
 		String Type=request.getParameter("Assignment_Type");
 		String grade= request.getParameter("Grade");
+		String Class_Type=request.getParameter("Class");
 		int gr=Integer.parseInt(grade);
 		System.out.println(Assignment+"\n"+gr);
 		// store data in User object and save User object in db
@@ -67,17 +68,17 @@ public class GradebookEntry extends HttpServlet {
 	        if(res.next()){
 	        	int student_id=res.getInt("student_id");
 	        	System.out.println(student_id);
-	             PreparedStatement ps=conn.prepareStatement("insert into sgradebook values(sgrade_id_seq.nextval,"+student_id+",'"+Name+"','"+Assignment+"','"+Type+"',"+gr+")");            
+	             PreparedStatement ps=conn.prepareStatement("insert into sgradebook values(sgrade_id_seq.nextval,"+student_id+",'"+Name+"','"+Assignment+"','"+Type+"',"+gr+",'"+Class_Type+"')");            
 	             ps.executeQuery(); 
 	        }
 	        else{
 
 	        	Statement st=conn.createStatement();
-	        	st.executeQuery("insert into sgradebook values(sgrade_id_seq.nextval,student_id_seq.nextval,'"+Name+"','"+Assignment+"','"+Type+"',"+gr+")");
+	        	st.executeQuery("insert into sgradebook values(sgrade_id_seq.nextval,student_id_seq.nextval,'"+Name+"','"+Assignment+"','"+Type+"',"+gr+",'"+Class_Type+")");
 		         
 	        }
              message+="The Information you enetered is as follows:<br>";
-             message+="Name:"+Name+"<br>Assignment:"+Assignment+"<br>Assignment Type:"+Type+"<br>Grade:"+grade;
+             message+="Name:"+Name+"<br>Assignment:"+Assignment+"<br>Assignment Type:"+Type+"<br>Grade:"+grade+"<br>Class:"+Class_Type;
 		// set User object in request object and set URL
 		request.setAttribute("message", message);
 		url2="/output.jsp";

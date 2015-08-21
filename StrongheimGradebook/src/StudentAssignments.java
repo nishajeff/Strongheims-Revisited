@@ -59,18 +59,25 @@ public class StudentAssignments extends HttpServlet {
 	        Connection conn = DriverManager.getConnection(url,props);
 	        //creating connection to Oracle database using JDBC              
 	        Statement s=conn.createStatement();
-	        ResultSet res=s.executeQuery("select * from sgradebook where student_name='"+Name+"'");
+	        
+	        ResultSet res1=s.executeQuery("select sum( Avg*assign_weights.weight)as Sum from assign_weights,(select class,type as T, avg(grade) as Avg from sgradebook  where student_name='"+Name+"' group by class,type)where assign_weights.ASSIGN_TYPE=T");
+	        if(res1.next()) 
+	        	   message+="Average Grade For All Classes after considering weighted assignments= "+res1.getInt("Sum");
+	        System.out.println(message);
 	        message+="<div align=\"center\"><table style=\"border:2px solid black\">";
-            message+="<th style=\" background-color:gray;border:2px solid black\">Assignment</th><th style=\" background-color:gray;border:2px solid black\">Type</th><th style=\" background-color:gray;border:2px solid black\">Grade</th>";
+            message+="<th style=\" background-color:gray;border:2px solid black\">Assignment</th><th style=\" background-color:gray;border:2px solid black\">Type</th><th style=\" background-color:gray;border:2px solid black\">Grade</th><th style=\" background-color:gray;border:2px solid black\">Class</th>";
+	        
+            ResultSet res=s.executeQuery("select * from sgradebook where student_name='"+Name+"'");
+	        
 	        while(res.next()){
-
                 message+="<tr ><td style=\" background-color:white;border:2px solid black\">"+ res.getString("assignment")+              
              		   "</td><td style=\" background-color:white;border:2px solid black\">"+res.getString("type")+
              		   "</td><td style=\"background-color:white;border:2px solid black\">" +res.getInt("grade")+
+             		    "</td><td style=\"background-color:white;border:2px solid black\">" +res.getString("class")+
              		  "</td></tr>" ;  
 	        }
 	        
-            
+          
 		// set User object in request object and set URL
 		request.setAttribute("message", message);
 		url2="/output.jsp";
